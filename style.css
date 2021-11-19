@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+}
+html {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    background: radial-gradient(rgb(22, 1, 29), rgb(109, 37, 156));
+}
+
+header {
+    border: 1px solid brown;
+}
+.game-container {
+    min-height: 100vh;
+    text-align: center;
+}
+.cell {
+    width: 300px;
+    height: 300px;
+    margin: 5px;
+}
+.top-cells {
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+}
+.bottom-cells {
+    display: flex;
+    justify-content: center;
+}
+.cell1 {
+    border-top-left-radius: 100%;
+    background-image: radial-gradient(rgb(240, 116, 85), red);
+    opacity: 0.8;
+    border: 10px solid rgba(161, 26, 26, 0.5);
+}
+.cell2 {
+    border-top-right-radius: 100%;
+    background-image: radial-gradient(rgb(74, 111, 233), blue);
+    opacity: 0.8;
+    border: 10px solid rgba(12, 24, 133, 0.5);
+}
+.cell3 {
+    border-bottom-left-radius: 100%;
+    background-image: radial-gradient(rgb(81, 226, 88), green);
+    opacity: 0.8;
+    border: 10px solid rgba(25, 107, 15, 0.5);
+}
+.cell4 {
+    border-bottom-right-radius: 100%;
+    background-image: radial-gradient(rgb(212, 214, 73),yellow);
+    opacity: 0.8;
+    border: 10px solid rgba(226, 148, 2, 0.5);
+}
+.case {
+    border-radius: 50%;
+    background: radial-gradient(black, rgb(37, 37, 37), black);
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.center-circle {
+    height: 300px;
+    width: 300px;
+    top: 300px;
+    z-index: 5;
+    border: 6px solid rgba(36, 36, 36, 0.5);
+}
+.background-circle {
+    height: 650px;
+    width: 650px;
+    top: 126px;
+    z-index: -5;
+    border: 5px solid rgba(136, 133, 133, 0.5);
+}
+
+/* SLIDER */
+.game-info {
+    position: relative;
+}
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    height: 25px; /* Specified height */
+    background: radial-gradient(rgb(46, 46, 46), rgb(0, 0, 0));; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    position: absolute;
+    margin-top: 380px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 10;
+}
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: radial-gradient(rgb(97, 10, 10), rgb(109, 27, 27)); /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+
+
+footer {
+    position: absolute;
+}
