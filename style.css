@@ -7,78 +7,49 @@ html {
     text-align: center;
     background: radial-gradient(rgb(22, 1, 29), rgb(109, 37, 156));
 }
-
 header {
     border: 1px solid brown;
 }
+
 .game-container {
     min-height: 100vh;
-    text-align: center;
+    position: relative;
+    /* border: 1px solid yellow; */
 }
-.cell {
-    width: 300px;
-    height: 300px;
-    margin: 5px;
-}
-.top-cells {
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-}
-.bottom-cells {
-    display: flex;
-    justify-content: center;
-}
-.cell1 {
-    border-top-left-radius: 100%;
-    background-image: radial-gradient(rgb(240, 116, 85), red);
-    opacity: 0.8;
-    border: 10px solid rgba(161, 26, 26, 0.5);
-}
-.cell2 {
-    border-top-right-radius: 100%;
-    background-image: radial-gradient(rgb(74, 111, 233), blue);
-    opacity: 0.8;
-    border: 10px solid rgba(12, 24, 133, 0.5);
-}
-.cell3 {
-    border-bottom-left-radius: 100%;
-    background-image: radial-gradient(rgb(81, 226, 88), green);
-    opacity: 0.8;
-    border: 10px solid rgba(25, 107, 15, 0.5);
-}
-.cell4 {
-    border-bottom-right-radius: 100%;
-    background-image: radial-gradient(rgb(212, 214, 73),yellow);
-    opacity: 0.8;
-    border: 10px solid rgba(226, 148, 2, 0.5);
-}
-.case {
-    border-radius: 50%;
-    background: radial-gradient(black, rgb(37, 37, 37), black);
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, 0);
-}
-.center-circle {
-    height: 300px;
-    width: 300px;
-    top: 300px;
-    z-index: 5;
-    border: 6px solid rgba(36, 36, 36, 0.5);
-}
-.background-circle {
-    height: 650px;
-    width: 650px;
-    top: 126px;
-    z-index: -5;
-    border: 5px solid rgba(136, 133, 133, 0.5);
-}
-
-/* SLIDER */
+/* ------------- IN GAME INFO ------------- */
 .game-info {
     position: relative;
 }
+.game-status {
+    /* border: 1px dashed green; */
+    position: relative;
+    font-size: 20px;
+    color: white;
+}
+.info {
+    top: -50px;
+
+    /* border: 1px solid white; */
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 20;
+}
+.info-left {
+    position: absolute;
+    margin-left: -300px;
+}
+.info-right {
+    position: absolute;
+    margin-left: 300px;
+}
+button {
+    position: absolute;
+    top: 330px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 10;
+}
+/* ----------------- SLIDER ----------------- */  
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
@@ -88,8 +59,9 @@ header {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
+
     position: absolute;
-    margin-top: 380px;
+    top: 360px;
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 10;
@@ -102,11 +74,148 @@ header {
     appearance: none;
     width: 25px; /* Set a specific slider handle width */
     height: 25px; /* Slider handle height */
-    background: radial-gradient(rgb(97, 10, 10), rgb(109, 27, 27)); /* Green background */
+    background: rgb(255, 0, 0); 
     cursor: pointer; /* Cursor on hover */
 }
-
-
+/* --------------- GAME CELLS --------------- */
+.cell {
+    width: 300px;
+    height: 300px;
+    margin: 5px;
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+.top-cells {
+    margin-top: 140px;
+    display: flex;
+    justify-content: center;
+}
+.bottom-cells {
+    display: flex;
+    justify-content: center;
+}
+.cell1 {
+    border-top-left-radius: 100%;
+    background: radial-gradient(rgb(240, 116, 85), red);
+    border: 10px solid rgba(161, 26, 26, 0.5);
+}
+.cell2 {
+    border-top-right-radius: 100%;
+    background: radial-gradient(rgb(74, 111, 233), blue);
+    border: 10px solid rgba(12, 24, 133, 0.5);
+}
+.cell3 {
+    border-bottom-left-radius: 100%;
+    background: radial-gradient(rgb(81, 226, 88), green);
+    border: 10px solid rgba(25, 107, 15, 0.5);
+}
+.cell4 {
+    border-bottom-right-radius: 100%;
+    background: radial-gradient(rgb(212, 214, 73),yellow);
+    border: 10px solid rgba(226, 148, 2, 0.5);
+}
+.case {
+    border-radius: 50%;
+    background: radial-gradient(black, rgb(37, 37, 37), black);
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+}
+.center-circle {
+    height: 300px;
+    width: 300px;
+    top: 150px;
+    z-index: 5;
+    border: 6px solid rgba(36, 36, 36, 0.5);
+}
+.background-circle {
+    height: 650px;
+    width: 650px;
+    top: -15px;
+    z-index: -5;
+    border: 5px solid rgba(136, 133, 133, 0.5);
+    /* BOX SHADOW HERE? */
+}
+#gameMsg {
+    position: absolute;
+    font-size: 50px;
+    color: white;
+}
+/* ---------------- FOOTER ---------------- */
 footer {
     position: absolute;
 }
+
+
+/* ------------ MODE 2 -------------- */
+.mode2 {
+    position: absolute;
+    left: 50%;
+    margin-top: 0px;
+    transform: translate(-50%, 0);
+    display: none;
+}
+.mode2-container {
+    height: 620px;
+    width: 620px;
+}
+.cell-holder {
+    position: absolute;
+    width:620px;
+    height:620px;
+    clip:rect(0px,620px,620px,310px);
+}
+.m2cell {
+    position: absolute;
+    width:620px;
+    height:620px;
+    clip:rect(0px,300px,620px,0px);
+    border-radius:310px; 
+}
+.m2cell1 .m2cell {
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(87, 88, 10),rgb(238, 238, 65)); */
+    transform:rotate(60deg);
+}
+.m2cell2 {
+    transform:rotate(60deg);
+}
+.m2cell2 .m2cell {
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(11, 25, 68), rgb(59, 59, 223)); */
+    transform:rotate(60deg);
+}
+.m2cell3 {
+    transform:rotate(120deg);
+}
+.m2cell3 .m2cell {
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(73, 19, 5), rgb(216, 60, 60));; */
+    transform:rotate(60deg);
+}
+.m2cell4 {
+    transform:rotate(180deg);
+}
+.m2cell4 .m2cell{
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(5, 23, 29),rgb(171, 128, 211)); */
+    transform:rotate(60deg);
+}
+.m2cell5 {
+    transform:rotate(240deg);
+}
+.m2cell5 .m2cell {
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(77, 47, 4),rgb(243, 157, 28)); */
+    transform:rotate(60deg);
+}
+.m2cell6 {
+    transform:rotate(300deg);
+}
+.m2cell6 .m2cell {
+    background-color: rgb(58, 45, 45);
+    /* background: linear-gradient(rgb(3, 63, 6), rgb(66, 245, 66)); */
+    transform:rotate(60deg);
+} 
+
