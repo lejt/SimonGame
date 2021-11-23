@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <script defer src="temp.js"></script>
+
+    <script defer src="script.js"></script>
     <title>Simon Game</title>
 </head>
 
 <body>
     <header>
-        <!-- <h1>Simon Game</h1> -->
         <div class="game-title">
             <svg viewBox="0 0 960 300">
                 <symbol id="s-text">
                     <text text-anchor="middle" x="50%" y="80%">Simon Game</text>
                 </symbol>
-            
+                
                 <g class = "g-ants">
                     <use xlink:href="#s-text" class="text-copy"></use>
                     <use xlink:href="#s-text" class="text-copy"></use>
@@ -26,9 +29,10 @@
                     <use xlink:href="#s-text" class="text-copy"></use>
                 </g>
             </svg>
+            <hr>
         </div>
-
     </header>
+
     <main>
         <div class="game-container">
 
@@ -84,16 +88,10 @@
                 </div>
             </div>
 
-            <!-- <h2 class="visible" id="gameMsg">GAME OVER</h2> -->
-
-
-
-
-
-
+            <h2 id="gameMsg">&#8857 GAME OVER &#8857</h2>
         </div>
     </main>
-
+    <hr>
     <footer>
         <h4>site created by jacky t</h4>
     </footer>

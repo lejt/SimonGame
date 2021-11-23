@@ -1,16 +1,28 @@
 // --------------------------- constants --------------------------------
 const sliderSettings = {
   0: {
-      wordColor: "black",
+      wordColor: "rgb(59, 11, 77)",
       m1show: "block",
       m2show: "none",
       background: "linear-gradient(#e66465, #192177)",
+      stroke1: "#17164d",
+      stroke2: "#062c74",
+      stroke3: "#f50808",
+      stroke4: "#045e1f",
+      stroke5: "#c4981f",
+      speed: "stroke-offset 6s infinite linear",
   },
   50: {
-      wordColor: "red",
+      wordColor: "rgb(225, 55, 55)",
       m1show: "none",
       m2show: "block",
       background: "radial-gradient(rgb(22, 1, 29), rgb(104, 15, 15))",
+      stroke1: "#801515",
+      stroke2: "#bd1919",
+      stroke3: "#b42121;",
+      stroke4: "#BD0034",
+      stroke5: "#FDB731",
+      speed: "stroke-offset 5.5s infinite linear",
   },
   100: {
     // 3rd game mode settings?
@@ -33,7 +45,7 @@ const cellColors = {
     6: "linear-gradient(150deg, rgb(3, 7, 70), rgb(255, 153, 0)",
   },
   mode3: {
-    // 3rd game mode color palette
+    // 3rd game mode color palette?
   },
 };
 
@@ -80,7 +92,13 @@ const gameLookup = {
   time: document.getElementById("time"),
   level: document.getElementById("level"),
   gameStatus: document.querySelector(".game-status"),
-  gameMsg: document.getElementById(".gameMsg")
+  gameMsg: document.getElementById("gameMsg"),
+  titleColor1: document.querySelector(".text-copy:nth-child(1)"),
+  titleColor2: document.querySelector(".text-copy:nth-child(2)"),
+  titleColor3: document.querySelector(".text-copy:nth-child(3)"),
+  titleColor4: document.querySelector(".text-copy:nth-child(4)"),
+  titleColor5: document.querySelector(".text-copy:nth-child(5)"),
+  titleSpeed: document.querySelector(".text-copy"),
 };
 
 // ---------------------- SLIDER MODE CHANGE v2.0 -------------------------
@@ -96,6 +114,14 @@ gameLookup.slider.oninput = function () {
     gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2show;
     gameLookup.mode1.cells.forEach(cell => cell.style.display = sliderSettings[sliderValue].m1show);
     gameLookup.html.style.background = sliderSettings[sliderValue].background;
+
+    //changing title colors and speed:
+    gameLookup.titleColor1.style.stroke = sliderSettings[sliderValue].stroke1;
+    gameLookup.titleColor2.style.stroke = sliderSettings[sliderValue].stroke2;
+    gameLookup.titleColor3.style.stroke = sliderSettings[sliderValue].stroke3;
+    gameLookup.titleColor4.style.stroke = sliderSettings[sliderValue].stroke4;
+    gameLookup.titleColor5.style.stroke = sliderSettings[sliderValue].stroke5;
+    gameLookup.titleSpeed.style.animation = sliderSettings[sliderValue].speed;
   }
 };
 
@@ -114,6 +140,7 @@ function init() {
     playerSelect: null,
   };
   countDown.stop();
+  gameLookup.gameMsg.style.display = "none";
   gameLookup.time.innerText = startState.time;
   gameLookup.level.innerText = startState.level;
   refreshColors();
@@ -236,7 +263,7 @@ function playerSelect(evt) {
     // cells = gameLookup.mode3.m3cells;
   }
 
-  cells[sequenceStorage.playerSelect-1].style.background = "purple";
+  cells[sequenceStorage.playerSelect-1].style.background = "lightblue";
   checkCorrect(mode, cells);
 };
 
@@ -258,7 +285,7 @@ function checkCorrect(mode, cells) {
     console.log("tempCheck Seq after shift: (+1) "+sequenceStorage.tempCheckSeq)
     
     if (sequenceStorage.tempCheckSeq.length === 0) {
-      //removes the event listener for cell clicks after sequence correct
+      //removes the event listener for cell clicks after whole sequence is correct
       removeEvents();
       gameLookup.level.innerText++;
       sequencer();
@@ -266,20 +293,20 @@ function checkCorrect(mode, cells) {
 
   } else {
     // console.log('incorrect');
-    timeOutPlayerSelect("red");
+    timeOutPlayerSelect("rgb(64, 10, 82)");
     gameOver();
   }
-}
+};
+
 function timeOutPlayerSelect(revertColor) {
   setTimeout(function() {
     cells[sequenceStorage.playerSelect-1].style.background = revertColor;
   },200)
 };
 function gameOver() {
-  //show text game over
+  gameLookup.gameMsg.style.display = "block";
   countDown.stop();
 }
-
 
 function play() {
   init();
@@ -296,5 +323,7 @@ document.querySelector("button").addEventListener("click", play);
 // highlightUnhighlight();
 
 // ----- THINGS TO DO ---------
-// change button words to restart at end game
+// change word on button to "restart" at end game
 // make mode3?
+// modify aesthetics on gameStatus
+
