@@ -1,4 +1,3 @@
-
 const gameLookup = {
     slider: document.getElementById("myRange"),
     mode1: {
@@ -20,6 +19,7 @@ const gameLookup = {
             m2cell6: document.querySelector(".m2cell6"),
     },
     html: document.querySelector("html"),
+    time: document.getElementById("time"),
     levels: document.getElementById(".levels"),
     gameStatus: document.querySelector(".game-status"),
     gameMsg: document.getElementById(".gameMsg")
@@ -30,7 +30,6 @@ const sliderSettings = {
       wordColor: "black",
       m1show: "block",
       m2show: "none",
-      // background: "radial-gradient(rgb(22, 1, 29), rgb(109, 37, 156))",
       background: "linear-gradient(#e66465, #192177)",
       clickCells: gameLookup.mode1.cells,
   },
@@ -39,7 +38,6 @@ const sliderSettings = {
       m1show: "none",
       m2show: "block",
       background: "radial-gradient(rgb(22, 1, 29), rgb(104, 15, 15))",
-      // clickCells: gameLookup.mode2.m2cells,
   },
   100: {
     // 3rd game mode settings?
@@ -53,7 +51,7 @@ const cellColors = {
     3: "radial-gradient(rgb(81, 226, 88), green)",
     4: "radial-gradient(rgb(212, 214, 73),yellow)",
   },
-  mode2: {    // come back to change colors if mode2 should be more colorful
+  mode2: {    
     1: "linear-gradient(135deg, rgb(1, 61, 9), rgb(58, 58, 160))",
     2: "linear-gradient(150deg, rgb(100, 3, 68), green)",
     3: "linear-gradient(155deg, rgb(17, 2, 46), yellow)",
@@ -70,7 +68,7 @@ const cellColors = {
 };
 
 // ------------------ App's state (variables) ---------------------
-let startState, sequenceStorage, mode, cells;
+let startState, sequenceStorage, mode, cells, startCountDown;
 
 
 // ------------------ SLIDER MODE CHANGE v2.0----------------------
@@ -79,6 +77,7 @@ sliderValue = 0;
 gameLookup.slider.oninput = function () {   
   sliderValue = this.value;
   console.log("Slider Value: "+sliderValue);
+  init();
   if (sliderValue in sliderSettings) {
     gameLookup.gameStatus.style.color = sliderSettings[sliderValue].wordColor;
     gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2show;
@@ -87,83 +86,24 @@ gameLookup.slider.oninput = function () {
   }
 };
 
-// ------------------ SLIDER MODE CHANGE v1.0----------------------
-// let sliderValue = 0;
-
-// gameLookup.slider.oninput = function () {   
-//   sliderValue = parseInt(this.value);
-//   console.log("slider value: "+this.value);
-
-//   if (parseInt(this.value) === 50) {
-//     gameLookup.gameStatus.style.color = "red";
-//     gameLookup.mode1.cells.forEach(cell => cell.style.display = "none");
-//     gameLookup.mode2.modeView.style.display = "block";
-//     gameLookup.html.style.background = "radial-gradient(rgb(22, 1, 29), rgb(104, 15, 15))";
-
-//   } else if (this.value == 100) {
-//     //show mode 3, hidden other modes
-//   } else {
-//     gameLookup.gameStatus.style.color = "white";
-//     gameLookup.mode1.cells.forEach(cell => cell.style.display = "block");
-//     gameLookup.mode2.modeView.style.display = "none";
-//     gameLookup.html.style.background = "radial-gradient(rgb(22, 1, 29), rgb(109, 37, 156))";
-//   }
-// }
-
-// ------------------ EVENT LISTENERS FOR ALL GAME MODES v3.0 ----------------------
-// gameLookup.mode1.cells.forEach(findId);
-// gameLookup.mode2.m2cells.forEach(findId);
-// // gameLookup.mode3.m3cells.forEach(findId);
-
-// function findId(cell) {
-//   cell.addEventListener("click", playerTurn);
-// };
-
-
-// ------------------ EVENT LISTENERS FOR ALL GAME MODES v2.0 ----------------------
-// gameLookup.mode1.cells.forEach(findId);
-// gameLookup.mode2.m2cells.forEach(findId);
-// gameLookup.mode3.m3cells.forEach(findId);
-
-// function findId (cell) {
-//   cell.addEventListener("click",(evt) => {
-//     //save player clicked cell into storage
-//     sequenceStorage.playerSelect = parseInt(evt.target.id);
-
-//     if (sliderValue == "0") {
-//       mode = gameLookup.mode1;
-//       cells = gameLookup.mode1.cells;
-//     } else if (sliderValue === "50") {
-//       mode = gameLookup.mode2;
-//       cells = gameLookup.mode2.m2cells;
-//     } else {
-//       // mode = gameLookup.mode3;
-//       // cells = gameLookup.mode3.m3cells;
-//     }
-//     console.log("CLICKED: "+sequenceStorage.playerSelect);
-//     cells[sequenceStorage.playerSelect-1].style.background = "purple";
-//     checkCorrect(mode, cells);
-//   })
-// };
-
-// ------------------ EVENT LISTENERS FOR ALL GAME MODES v1.0 ----------------------
-// sliderValue == 0 ? cellClick = gameLookup.mode1.cells : cellClick = gameLookup.mode2.m2cell1;
-// cellClick.forEach((cell)=>{
-//     cell.addEventListener('click',(evt) => {
-//         console.log(evt.target.id);
-//     })
-// });
-// gameLookup.mode2.m2cells.forEach((cell)=>{
-//   cell.addEventListener('click',(evt) => {
-//       console.log(evt.target.id);
-//   })
-// });
-
-
+// ------------------ EVENT LISTENERS FOR ALL GAME MODES v4.0 ----------------------
+// event listeners embedded into functions
+const countDown = {
+  start: function() {
+                      let timeRemaining = startState.time;
+                      startCountDown = setInterval(function() {
+                        timeRemaining--;
+                        gameLookup.time.innerText = timeRemaining;        
+                        if (timeRemaining === 0) {
+                          gameOver();
+                        }
+                      }, 1000);  
+  },
+  stop: function() {
+                      clearInterval(startCountDown) },
+}
 // ------------------- FUNCTIONS ----------------------
 function init() {
-  // let clickCells = gameLookup.mode1.cells;
-
   startState = {
     level: 0,
     time: 100,
@@ -173,10 +113,11 @@ function init() {
     tempCheckSeq: [],
     playerSelect: null,
   };
+  countDown.stop();
+  gameLookup.time.innerText = startState.time;
   refreshColors();
   removeEvents();
 };
-
 function refreshColors() {
   gameLookup.mode1.cells.forEach(cell=> {
     if (cell.id in cellColors.mode1) {
@@ -189,7 +130,6 @@ function refreshColors() {
     }
   })
 };
-
 function removeEvents() {
   //removes the event listener for cell clicks after sequence correct
   gameLookup.mode1.cells.forEach(removeListener);
@@ -199,7 +139,6 @@ function removeEvents() {
     cell.removeEventListener("click", playerSelect, false);
   };
 }
-
 function randomCell() {
   let cellLength = "";
 
@@ -214,7 +153,6 @@ function randomCell() {
   let randomIndex = Math.floor(Math.random()*cellLength);
   return randomIndex;
 };
-
 function sequencer() {
   let idx = randomCell();
   //initial game mode
@@ -248,8 +186,6 @@ function sequencer() {
     }
   }, 700);
 }; 
-
-
 function highlightUnhighlight(mode, cell, idx) {
     //highlight
     setTimeout(function() {
@@ -267,7 +203,6 @@ function highlightUnhighlight(mode, cell, idx) {
         },500);
     },500);
 };
-
 function playerClick() {
   gameLookup.mode1.cells.forEach(addListener);
   gameLookup.mode2.m2cells.forEach(addListener);
@@ -276,7 +211,6 @@ function playerClick() {
   function addListener(cell) {
     cell.addEventListener("click", playerSelect);
   };
-  
 };
 // cannot use this function properly until game button is clicked (is initialized)
 function playerSelect(evt) {
@@ -296,7 +230,6 @@ function playerSelect(evt) {
   cells[sequenceStorage.playerSelect-1].style.background = "purple";
   checkCorrect(mode, cells);
 };
-
 function checkCorrect(mode, cells) {
   //check if clicked cell is matching the correct sequence
   if (sequenceStorage.playerSelect === sequenceStorage.tempCheckSeq[0]+1) {
@@ -323,18 +256,23 @@ function checkCorrect(mode, cells) {
   } else {
     // console.log('incorrect');
     timeOutPlayerSelect("red");
-    // gameOver();
+    gameOver();
   }
 }
-
 function timeOutPlayerSelect(revertColor) {
   setTimeout(function() {
     cells[sequenceStorage.playerSelect-1].style.background = revertColor;
   },200)
 };
+function gameOver() {
+  //show text game over
+  countDown.stop();
+}
+
 
 function play() {
   init();
+  countDown.start();
   sequencer();
 }
 
@@ -347,6 +285,5 @@ document.querySelector("button").addEventListener("click", play);
 // highlightUnhighlight();
 
 // ----- THINGS TO DO ---------
-// timer, level, change button words to restart at end game
-// make endgame function
-// when switch game mode mid way, everything resets, disable click events
+// level, change button words to restart at end game
+// make mode3?
