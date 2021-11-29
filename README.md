@@ -19,8 +19,8 @@ The intention of this project is to use HTML, CSS, and vanilla JS to create a st
 
 ## Features
 ### Implemented
-* In addition to the original game mode, create 2 game modes with increasing difficulty and cells
-* Generate DRY code for random cell light up dependent on current game state and length of cell array
+* In addition to the original game mode, created 2 game modes with increasing difficulty and cells
+* Generated DRY code for random cell light up dependent on current game state and length of cell array
 * Implemented animation of elements bouncing inside viewport as an exclusive feature of the third game mode for increased difficulty.
 
 ### Development Ideas
@@ -28,4 +28,4 @@ The intention of this project is to use HTML, CSS, and vanilla JS to create a st
 * Create animations for cell click and in-game status messages
 
 ## Usage
-Visit to play my game! 
+[Click Here](https://lejt.github.io/SimonGame/) to play my game! 
