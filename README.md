@@ -1,5 +1,5 @@
 # Simon Game 
-![mySimonGame](/Resources/Images/mySimonGame.png)
+![mySimonGame](Resources/Images/mySimonGame.jpg)
 
 This is a digital remake with custom additions of the popular memory game in the late 1970s called Simon Game! 
 In the game's circular frame, it contains a number of cells which light up in a randomized order. The objective is to click each cell in correct sequential order with each level increasing the sequence by one.
