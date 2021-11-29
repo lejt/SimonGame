@@ -179,14 +179,14 @@ gameLookup.slider.oninput = function () {
   } else if (sliderValue === "50") {
     gameState.mode = gameLookup.mode2;
     gameState.cells = gameState.mode.m2cells;
-    flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    intervalSpeed = sliderSettings[sliderValue].intervalSpeed; 
+    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed; 
     gameState.cellLength = (gameLookup.mode2.m2cells).length;
   } else {
     gameState.mode = gameLookup.mode3;
     gameState.cells = gameState.mode.m3cells;
-    flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
+    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
     gameState.cellLength = (gameLookup.mode3.m3cells).length;
   };
 };
