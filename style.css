@@ -9,23 +9,6 @@ html {
     background: linear-gradient(#e66465, #192177);
     font-family: 'Montserrat', sans-serif;
 }
-/* .m3Bg {
-    height: 100%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0; 
-    z-index: -1;
-}
-.mode3Bg2 {
-    background: linear-gradient(#3b81c7, #123424);
-    opacity: 1;
-}
-.mode3Bg3 {
-    background: linear-gradient(#723490, #7dad0c);
-    opacity: 0;
-} */
 header .game-title {
     background: linear-gradient(to bottom, rgba(133, 70, 175, 0.7), rgba(255, 255, 255, 0));
 }
@@ -37,21 +20,18 @@ hr {
 .game-container {
     height: 100vh;
     position: relative;
-    /* border: 1px solid yellow; */
 }
 /* ----------------------- IN GAME INFO ----------------------- */
 .game-info {
     position: relative;
 }
 .game-status {
-    /* border: 1px dashed green; */
     position: relative;
     font-size: 20px;
     color: rgb(59, 11, 77);
 }
 .info {
     top: -50px;
-    /* border: 1px solid white; */
     left: 50%;
     transform: translate(-50%, 0);
     z-index: 20;
@@ -69,7 +49,6 @@ button {
     font-weight: bold;
     font-size: 16px;
     background: rgb(59, 59, 59);
-    /* border: 1px solid black; */
     border-radius: 20px;
     position: absolute;
     top: 330px;
@@ -92,13 +71,13 @@ button {
 }
 /* -------------------------- SLIDER --------------------------- */  
 .slider {
-    -webkit-appearance: none;  /* Override default CSS styles */
+    -webkit-appearance: none;  
     appearance: none;
-    height: 25px; /* Specified height */
-    background: radial-gradient(rgb(46, 46, 46), rgb(0, 0, 0));; /* Grey background */
-    outline: none; /* Remove outline */
-    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
-    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    height: 25px; 
+    background: radial-gradient(rgb(46, 46, 46), rgb(0, 0, 0));; 
+    outline: none; 
+    opacity: 0.7; 
+    -webkit-transition: .2s; 
     transition: opacity .2s;
     border: 1px solid rgb(94, 91, 91);
     border-radius: 2px;
@@ -109,15 +88,15 @@ button {
     z-index: 5;
 }
 .slider:hover {
-    opacity: 1; /* Fully shown on mouse-over */
+    opacity: 1; 
 }
 .slider::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
+    -webkit-appearance: none; 
     appearance: none;
-    width: 25px; /* Set a specific slider handle width */
-    height: 25px; /* Slider handle height */
+    width: 25px; 
+    height: 25px; 
     background: rgb(255, 0, 0); 
-    cursor: pointer; /* Cursor on hover */
+    cursor: pointer; 
 }
 /* ------------------------ GAME CELLS -------------------------- */
 .cell {
@@ -133,7 +112,6 @@ button {
     margin-top: 50px;      /* shifts the whole game element up and down */
     display: flex;
     justify-content: center;
-    
 }
 .bottom-cells {
     display: flex;
@@ -181,16 +159,12 @@ button {
     top: -15px;
     z-index: 1;
     border: 5px solid rgba(136, 133, 133, 0.5);
-    /* BOX SHADOW HERE? */
 }
-
 /* -------------------------- FOOTER --------------------------- */
 footer {
-    /* position: absolute; */
     text-align: right;
     color: white;
 }
-
 /* -------------------------- MODE 2 ---------------------------- */
 .mode2 {
     position: absolute;
@@ -257,7 +231,6 @@ footer {
     background: linear-gradient(150deg, rgb(3, 7, 70), rgb(255, 153, 0));
     transform:rotate(60deg);
 } 
-
 /* ------------------------ MODE 3 --------------------------- */
 .mode3 {
     position: absolute;
@@ -337,17 +310,11 @@ footer {
     background-color: rgb(58, 45, 45);
     transform:rotate(45deg);
 } 
-
 /* -------------------------- Floater --------------------------- */
 .mode3-floaters {
     position: absolute;
     z-index: 10;
 }
-/*  dont need below for code to work (.x .y) */
-/* .x {
-}
-.y {
-}  */
 .floater {
     width: 50px;
     height: 50px;
@@ -364,8 +331,7 @@ footer {
     100% { transform: translateY(calc(100vh - 100px));
     }
 }
-
-/* -------------- h1 title animation and style ---------------*/
+/* ----------------- h1 title animation and style -----------------*/
 svg {
     display: block;
     font-size: 9em;
@@ -384,27 +350,22 @@ svg {
 }
 .text-copy:nth-child(1){
 	stroke: #17164d;
-	/* stroke: #9c2a7c; */
 	animation-delay: -1s;
 }
 .text-copy:nth-child(2){
 	stroke: #062c74;
-	/* stroke: #840037; */
 	animation-delay: -2s;
 }
 .text-copy:nth-child(3){
 	stroke: #f50808;
-	/* stroke: #BD0034; */
 	animation-delay: -3s;
 }
 .text-copy:nth-child(4){
 	stroke: #045e1f;
-	/* stroke: #BD0034; */
 	animation-delay: -4s;
 }
 .text-copy:nth-child(5){
 	stroke: #c4981f;
-	/* stroke: #FDB731; */
 	animation-delay: -5s;
 }
 @keyframes stroke-offset{
