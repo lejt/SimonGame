@@ -378,7 +378,6 @@ function play() {
     mode2BGM.play();
   } else if (sliderValue === "100") {
     activateFloats();
-    // mode3BackgroundChange();
     mode3BGM.play();
   }
 };
