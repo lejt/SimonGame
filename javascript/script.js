@@ -281,9 +281,9 @@ function highlightUnhighlight(mode, cell, idx, flashSpeed) {
         } else if ("m3cells" in mode) {
           cell.style.background = cellColors.mode3[1];
         }
-      },gameState.flashSpeed);
+      }, flashSpeed);
 
-    },gameState.flashSpeed);
+    }, flashSpeed);
 
   };
   
