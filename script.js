@@ -14,7 +14,7 @@ const sliderSettings = {
       stroke3: "#f50808",
       stroke4: "#045e1f",
       stroke5: "#c4981f",
-      titleSpeed: "stroke-offset 5.5s infinite linear",
+      // titleSpeed: "stroke-offset 5.5s infinite linear",
   },
   50: {
       wordColor: "rgb(225, 55, 55)",
@@ -30,7 +30,7 @@ const sliderSettings = {
       stroke3: "#b42121;",
       stroke4: "#BD0034",
       stroke5: "#FDB731",
-      titleSpeed: "stroke-offset 3s infinite linear",
+      // titleSpeed: "stroke-offset 3s infinite linear",
   },
   100: {
       wordColor: "rgb(190, 167, 167)",
@@ -47,7 +47,7 @@ const sliderSettings = {
       stroke3: "#000000;",
       stroke4: "#37a8a9",
       stroke5: "#16456a",
-      titleSpeed: "stroke-offset 2s infinite linear",
+      // titleSpeed: "stroke-offset 2s infinite linear",
   },
 };
 
@@ -68,7 +68,6 @@ const cellColors = {
   },
   mode3: {
     1: "rgb(0, 0, 0)",
-    // 1: "rgb(58, 45, 45)",
   },
 };
 
@@ -88,7 +87,7 @@ const countDown = {
 };
 
 // ------------------ App's state (Global variables) ---------------------
-let startState, sequenceStorage, mode, cells, startCountDown;
+let startCountDown; //startState, sequenceStorage, mode, cells, 
 
 // -------------------- cached elements references -----------------------
 const gameLookup = {
@@ -148,6 +147,7 @@ sliderValue = "0";
 gameLookup.slider.oninput = function () {   
   sliderValue = this.value;
   console.log("Slider Value: "+sliderValue);
+  soundStackPlay(sliderSound);
   init();
   if (sliderValue in sliderSettings) {
     gameLookup.gameStatus.style.color = sliderSettings[sliderValue].wordColor;
@@ -155,16 +155,14 @@ gameLookup.slider.oninput = function () {
     gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2show;     //<==== use camelCase?! m2show
     gameLookup.mode3.modeView.style.display = sliderSettings[sliderValue].m3show;
     gameLookup.html.style.background = sliderSettings[sliderValue].background; 
-
+    
     //changing title colors and speed:
     gameLookup.titleColor1.style.stroke = sliderSettings[sliderValue].stroke1;
     gameLookup.titleColor2.style.stroke = sliderSettings[sliderValue].stroke2;
     gameLookup.titleColor3.style.stroke = sliderSettings[sliderValue].stroke3;
     gameLookup.titleColor4.style.stroke = sliderSettings[sliderValue].stroke4;
     gameLookup.titleColor5.style.stroke = sliderSettings[sliderValue].stroke5;
-    gameLookup.titleSpeed.style.animation = sliderSettings[sliderValue].titleSpeed;
-
-    console.log(document.querySelector(".text-copy").style.animation);
+    // gameLookup.titleSpeed.style.animation = sliderSettings[sliderValue].titleSpeed;
   }
 };
 
@@ -190,6 +188,7 @@ function init() {
   gameLookup.m3floaters.forEach(floater=> {floater.style.display = "none"});
   refreshColors();
   removeEvents();
+  bgmArray.forEach(mode => mode.pause());
 };
 
 function refreshColors() {
@@ -304,6 +303,7 @@ function playerClick() {
 // stores which cell player clicked and lights up cell
 function playerSelect(evt) {
   sequenceStorage.playerSelect = parseInt(evt.target.id);
+  soundStackPlay(buttonClick);
 
   if (sliderValue == "0") {
     mode = gameLookup.mode1;
@@ -359,6 +359,8 @@ function gameOver() {
   gameLookup.gameMsg.style.display = "block";
   gameLookup.button.innerText = "Restart";
   countDown.stop();
+  gameOverSound.play();
+  bgmArray.forEach(mode => mode.pause());
   //fade out floats on mode 3
 };
 
@@ -385,19 +387,43 @@ function play() {
   init();
   countDown.start();
   sequencer();
-  if (sliderValue === "100") {
+  if (sliderValue === "0") {
+    mode1BGM.play();
+  } else if (sliderValue === "50") {
+    mode2BGM.play();
+  } else if (sliderValue === "100") {
     activateFloats();
+    mode3BGM.play();
   }
+  
 };
 
 // ------------------ ACTION -------------------
 document.querySelector("button").addEventListener("click", play);
 
-// ----- THINGS TO DO ---------
-// css masking to cut holes in casing? allow floats to float in background
-// music?
+// AUDIO TESTING
+const mode1BGM = new Audio("Resources/Audio/mode1.mp3");
+const mode2BGM = new Audio("Resources/Audio/mode2.mp3");
+const mode3BGM = new Audio("Resources/Audio/mode3.wav");
+const gameOverSound = new Audio("Resources/Audio/gameOver.mp3");
+const buttonClick = new Audio("Resources/Audio/buttonClick.mp3");
+const sliderSound = new Audio("Resources/Audio/slider.mp3");
 
+// auto control
+const bgmArray = [mode1BGM, mode2BGM, mode3BGM];
+bgmArray.forEach(mode => mode.loop = true);
+mode2BGM.volume = 0.25;
+mode3BGM.volume = 0.5;
+function buttonClickFast () {
+  // allows the stacking of clicks regardless if previous click audio has not ended
+  buttonClick.currentTime = 0;
+  buttonClick.play();
+}
 
+function soundStackPlay (audio) {
+  audio.currentTime = 0;
+  audio.play();
+}
 
 
 // DOM MANIPULATION METHOD TO CREATE DIVS FOR FLOATERS INSTEAD OF CREATING THEM IN HTML
