@@ -2,9 +2,9 @@
 const sliderSettings = {
   0: {
       wordColor: "rgb(59, 11, 77)",
-      m1show: "block",
-      m2show: "none",
-      m3show: "none",
+      m1Show: "block",
+      m2Show: "none",
+      m3Show: "none",
       background: "linear-gradient(#e66465, #192177)",
       flashSpeed: 500,
       intervalSpeed: 700,
@@ -14,13 +14,12 @@ const sliderSettings = {
       stroke3: "#f50808",
       stroke4: "#045e1f",
       stroke5: "#c4981f",
-      // titleSpeed: "stroke-offset 5.5s infinite linear",
   },
   50: {
       wordColor: "rgb(225, 55, 55)",
-      m1show: "none",
-      m2show: "block",
-      m3show: "none",
+      m1Show: "none",
+      m2Show: "block",
+      m3Show: "none",
       background: "radial-gradient(rgb(22, 1, 29), rgb(104, 15, 15))",
       flashSpeed: 300,
       intervalSpeed: 350,
@@ -30,13 +29,12 @@ const sliderSettings = {
       stroke3: "#b42121;",
       stroke4: "#BD0034",
       stroke5: "#FDB731",
-      // titleSpeed: "stroke-offset 3s infinite linear",
   },
   100: {
       wordColor: "rgb(190, 167, 167)",
-      m1show: "none",
-      m2show: "none",
-      m3show: "block",
+      m1Show: "none",
+      m2Show: "none",
+      m3Show: "block",
       floaterShow: "block",
       background: "linear-gradient(#000000, #121858)",
       flashSpeed: 200,
@@ -47,7 +45,6 @@ const sliderSettings = {
       stroke3: "#000000;",
       stroke4: "#37a8a9",
       stroke5: "#16456a",
-      // titleSpeed: "stroke-offset 2s infinite linear",
   },
 };
 
@@ -56,7 +53,7 @@ const cellColors = {
     1: "radial-gradient(rgb(240, 116, 85), red)",
     2: "radial-gradient(rgb(74, 111, 233), blue)",
     3: "radial-gradient(rgb(81, 226, 88), green)",
-    4: "radial-gradient(rgb(212, 214, 73),yellow)",
+    4: "radial-gradient(rgb(212, 214, 73), yellow)",
   },
   mode2: {    
     1: "linear-gradient(135deg, rgb(1, 61, 9), rgb(58, 58, 160))",
@@ -68,9 +65,11 @@ const cellColors = {
   },
   mode3: {
     1: "rgb(0, 0, 0)",
+    // bgColor: ["linear-gradient(#000000, #121858)", "linear-gradient(#123456, #123424)", "linear-gradient(#723490, #000000)"], 
   },
 };
 
+// global countDown object
 const countDown = {
   start: function() {
                       let timeRemaining = startState.time;
@@ -85,9 +84,6 @@ const countDown = {
   stop: function() {
                       clearInterval(startCountDown) },
 };
-
-// ------------------ App's state (Global variables) ---------------------
-let startCountDown; //startState, sequenceStorage, mode, cells, 
 
 // -------------------- cached elements references -----------------------
 const gameLookup = {
@@ -122,6 +118,7 @@ const gameLookup = {
           m3cell6: document.querySelector(".m3cell6"),
           m3cell7: document.querySelector(".m3cell7"),
           m3cell8: document.querySelector(".m3cell8"),
+          // bgChange: [document.querySelector("html"), document.querySelector(".mode3Bg2"), document.querySelector(".mode3Bg3")]
   },
   html: document.querySelector("html"),
   time: document.getElementById("time"),
@@ -134,13 +131,23 @@ const gameLookup = {
   titleColor3: document.querySelector(".text-copy:nth-child(3)"),
   titleColor4: document.querySelector(".text-copy:nth-child(4)"),
   titleColor5: document.querySelector(".text-copy:nth-child(5)"),
-  titleSpeed: document.querySelector(".text-copy"),
   m3floaters: document.querySelectorAll(".floater"),
   m3floaterX: document.querySelectorAll(".x"),
   m3floaterY: document.querySelectorAll(".y"),
 };
 
-// ---------------------- SLIDER MODE CHANGE v2.0 -------------------------
+// ------------------ App's state (Global variables) ---------------------
+let startCountDown; 
+
+const gameState = {
+  mode: gameLookup.mode1,
+  cells: gameLookup.mode1.cells,
+  cellLength: gameLookup.mode1.cells.length,
+  flashSpeed: sliderSettings[0].flashSpeed,
+  intervalSpeed: sliderSettings[0].intervalSpeed,
+};
+
+// ------------------------- SLIDER MODE CHANGE ---------------------------
 // reads the state of slider upon change and varies game mode style and functions accordingly
 
 sliderValue = "0";
@@ -151,22 +158,41 @@ gameLookup.slider.oninput = function () {
   init();
   if (sliderValue in sliderSettings) {
     gameLookup.gameStatus.style.color = sliderSettings[sliderValue].wordColor;
-    gameLookup.mode1.cells.forEach(cell => cell.style.display = sliderSettings[sliderValue].m1show);
-    gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2show;     //<==== use camelCase?! m2show
-    gameLookup.mode3.modeView.style.display = sliderSettings[sliderValue].m3show;
+    gameLookup.mode1.cells.forEach(cell => cell.style.display = sliderSettings[sliderValue].m1Show);
+    gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2Show;     
+    gameLookup.mode3.modeView.style.display = sliderSettings[sliderValue].m3Show;
     gameLookup.html.style.background = sliderSettings[sliderValue].background; 
     
-    //changing title colors and speed:
+    // changing title elements' colors:
     gameLookup.titleColor1.style.stroke = sliderSettings[sliderValue].stroke1;
     gameLookup.titleColor2.style.stroke = sliderSettings[sliderValue].stroke2;
     gameLookup.titleColor3.style.stroke = sliderSettings[sliderValue].stroke3;
     gameLookup.titleColor4.style.stroke = sliderSettings[sliderValue].stroke4;
     gameLookup.titleColor5.style.stroke = sliderSettings[sliderValue].stroke5;
-    // gameLookup.titleSpeed.style.animation = sliderSettings[sliderValue].titleSpeed;
   }
+
+  if (sliderValue == "0") {
+    gameState.mode = gameLookup.mode1;
+    gameState.cells = gameState.mode.cells;
+    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
+    gameState.cellLength = (gameLookup.mode1.cells).length;
+  } else if (sliderValue === "50") {
+    gameState.mode = gameLookup.mode2;
+    gameState.cells = gameState.mode.m2cells;
+    flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    intervalSpeed = sliderSettings[sliderValue].intervalSpeed; 
+    gameState.cellLength = (gameLookup.mode2.m2cells).length;
+  } else {
+    gameState.mode = gameLookup.mode3;
+    gameState.cells = gameState.mode.m3cells;
+    flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
+    gameState.cellLength = (gameLookup.mode3.m3cells).length;
+  };
 };
 
-// --------------- EVENT LISTENERS FOR ALL GAME MODES v4.0 ----------------
+// ---------------- EVENT LISTENERS FOR ALL GAME MODES  -------------------
 // event listeners embedded into functions: playerClick(), removeEvents()
 
 // ----------------------------- FUNCTIONS --------------------------------
@@ -214,16 +240,7 @@ function removeEvents() {
 };
 
 function randomCell() {
-  let cellLength = "";
-
-  if (sliderValue == "0") {
-    cellLength = (gameLookup.mode1.cells).length;
-  } else if (sliderValue === "50") {
-    cellLength = (gameLookup.mode2.m2cells).length;
-  } else {
-    cellLength = (gameLookup.mode3.m3cells).length;
-  }
-  let randomIndex = Math.floor(Math.random()*cellLength);
+  let randomIndex = Math.floor(Math.random()*gameState.cellLength);
   return randomIndex;
 };
 
@@ -232,28 +249,11 @@ function sequencer() {
   cells = [];
   mode = "";
 
-  // add new sequence to end of previous sequence and creates a copy of array for checking 
+  // add new random cell to end of previous sequence and creates a copy of array for checking 
   sequenceStorage.correctSeq.push(idx);
   sequenceStorage.correctSeq.forEach(order=> sequenceStorage.tempCheckSeq.push(order));
-    
-  if (sliderValue == "0") {
-    mode = gameLookup.mode1;
-    cells = mode.cells;
-    flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
-  } else if (sliderValue === "50") {
-    mode = gameLookup.mode2;
-    cells = mode.m2cells;
-    flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
-  } else {
-    mode = gameLookup.mode3;
-    cells = mode.m3cells;
-    flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
-  };
 
-  // displays each element of new sequence one by one 
+  // displays each element of new sequence one by one by highlighting and unhighlighting them
   let i = 0;
   const pacing = setInterval(() => {
     if (i > sequenceStorage.correctSeq.length-1) {
@@ -261,10 +261,10 @@ function sequencer() {
       // player click event listener activated only AFTER whole generated sequence is displayed
       playerClick();
     } else {
-      highlightUnhighlight(mode, cells[sequenceStorage.correctSeq[i]], sequenceStorage.correctSeq[i], flashSpeed);
+      highlightUnhighlight(gameState.mode, gameState.cells[sequenceStorage.correctSeq[i]], sequenceStorage.correctSeq[i], gameState.flashSpeed);
       i++;
     }
-  }, intervalSpeed);
+  }, gameState.intervalSpeed);
 }; 
 
 // cell light on and light off
@@ -282,15 +282,15 @@ function highlightUnhighlight(mode, cell, idx, flashSpeed) {
         } else if ("m3cells" in mode) {
           cell.style.background = cellColors.mode3[1];
         }
-      },flashSpeed);
+      },gameState.flashSpeed);
 
-    },flashSpeed);
+    },gameState.flashSpeed);
 
-    console.log("tempCheck Seq after shift: (+1) "+sequenceStorage.tempCheckSeq);
-};
-
+  };
+  
 // click event listeners
 function playerClick() {
+  console.log("Sequence answer: "+sequenceStorage.tempCheckSeq);
   gameLookup.mode1.cells.forEach(addListener);
   gameLookup.mode2.m2cells.forEach(addListener);
   gameLookup.mode3.m3cells.forEach(addListener);
@@ -300,41 +300,29 @@ function playerClick() {
   };
 };
 
-// stores which cell player clicked and lights up cell
+// stores player clicked cell and lights up cell
 function playerSelect(evt) {
   sequenceStorage.playerSelect = parseInt(evt.target.id);
   soundStackPlay(buttonClick);
 
-  if (sliderValue == "0") {
-    mode = gameLookup.mode1;
-    cells = gameLookup.mode1.cells;
-  } else if (sliderValue === "50") {
-    mode = gameLookup.mode2;
-    cells = gameLookup.mode2.m2cells;
-  } else {
-    mode = gameLookup.mode3;
-    cells = gameLookup.mode3.m3cells;
-  }
-
-  cells[sequenceStorage.playerSelect-1].style.background = "lightblue";
-  checkCorrect(mode, cells);
+  gameState.cells[sequenceStorage.playerSelect-1].style.background = "lightblue";
+  checkCorrect(gameState.mode, gameState.cells);
 };
 
 // compares player clicked cell with correct sequence 
 function checkCorrect(mode, cells) {
   if (sequenceStorage.playerSelect === sequenceStorage.tempCheckSeq[0]+1) {
     sequenceStorage.tempCheckSeq.shift();
-    // console.log('correct');
 
     //light off player selected cell if correctly matched
     if ("cells" in mode) {
-      timeOutPlayerSelect(cellColors.mode1[sequenceStorage.playerSelect]);
+      unhighlightPlayerSelect(cellColors.mode1[sequenceStorage.playerSelect]);
     } else if ("m2cells" in mode) {
-      timeOutPlayerSelect(cellColors.mode2[sequenceStorage.playerSelect]);
+      unhighlightPlayerSelect(cellColors.mode2[sequenceStorage.playerSelect]);
     } else {
-      timeOutPlayerSelect(cellColors.mode3[1]);
+      unhighlightPlayerSelect(cellColors.mode3[1]);
     } 
-    
+    // when whole sequence from player clicks is correct, continue on to next sequence
     if (sequenceStorage.tempCheckSeq.length === 0) {
       //removes the event listener for cell clicks after whole sequence is correct
       removeEvents();
@@ -343,15 +331,14 @@ function checkCorrect(mode, cells) {
     }
 
   } else {
-    // console.log('incorrect');
-    timeOutPlayerSelect("rgb(64, 10, 82)");
+    unhighlightPlayerSelect("rgb(83, 36, 85)");
     gameOver();
   }
 };
 
-function timeOutPlayerSelect(revertColor) {
+function unhighlightPlayerSelect(revertColor) {
   setTimeout(function() {
-    cells[sequenceStorage.playerSelect-1].style.background = revertColor;
+    gameState.cells[sequenceStorage.playerSelect-1].style.background = revertColor;
   },sliderSettings[sliderValue].playerUnhighlight)
 };
 
@@ -361,10 +348,9 @@ function gameOver() {
   countDown.stop();
   gameOverSound.play();
   bgmArray.forEach(mode => mode.pause());
-  //fade out floats on mode 3
 };
 
-// only for mode 3, to activate floaters on screen
+// function only for mode 3, for activating floaters on screen
 function activateFloats() {
   gameLookup.m3floaters.forEach(floater => floater.style.display = sliderSettings[100].floaterShow);
   gameLookup.m3floaterX.forEach((x)=>{
@@ -383,6 +369,7 @@ function getRandomRange(min, max) {
   return (Math.random() * (max - min) + min).toString();
 }
 
+
 function play() {
   init();
   countDown.start();
@@ -393,15 +380,12 @@ function play() {
     mode2BGM.play();
   } else if (sliderValue === "100") {
     activateFloats();
+    // mode3BackgroundChange();
     mode3BGM.play();
   }
-  
 };
 
-// ------------------ ACTION -------------------
-document.querySelector("button").addEventListener("click", play);
-
-// AUDIO TESTING
+// ------------------------- AUDIO INPUT -------------------------------
 const mode1BGM = new Audio("Resources/Audio/mode1.mp3");
 const mode2BGM = new Audio("Resources/Audio/mode2.mp3");
 const mode3BGM = new Audio("Resources/Audio/mode3.wav");
@@ -409,91 +393,19 @@ const gameOverSound = new Audio("Resources/Audio/gameOver.mp3");
 const buttonClick = new Audio("Resources/Audio/buttonClick.mp3");
 const sliderSound = new Audio("Resources/Audio/slider.mp3");
 
-// auto control
+// Audio Control
 const bgmArray = [mode1BGM, mode2BGM, mode3BGM];
 bgmArray.forEach(mode => mode.loop = true);
 mode2BGM.volume = 0.25;
 mode3BGM.volume = 0.5;
-function buttonClickFast () {
-  // allows the stacking of clicks regardless if previous click audio has not ended
-  buttonClick.currentTime = 0;
-  buttonClick.play();
-}
 
 function soundStackPlay (audio) {
+  // allows the stacking of audio regardless if previous audio has ended
   audio.currentTime = 0;
   audio.play();
 }
 
+// ------------------ ACTION -------------------
+document.querySelector("button").addEventListener("click", play);
 
-// DOM MANIPULATION METHOD TO CREATE DIVS FOR FLOATERS INSTEAD OF CREATING THEM IN HTML
-// function createFloats() {
-//   //add this before m3 container
-//   newFloatX = document.createElement("div");
-//   newFloatX.classList.add("x");
-//   newFloatY = document.createElement("div");
-//   newFloatY.classList.add("y");
-//   newFloatY.classList.add("floater");
-//   newFloatX.appendChild(newFloatY);
-//   document.querySelector(".mode3-floaters").appendChild(newFloatX);
-// };
 
-// createFloats();
-// createFloats();
-// createFloats();
-// createFloats();
-
-// activateFloats2();
-
-// function activateFloats2() {
-//   floaterDiv = document.querySelector(".mode3-floaters");
-//   xDiv = document.getElementsByClassName("x");
-//   yDiv = document.getElementsByClassName("floater");  //is an object
-//   yDiv2 = document.querySelectorAll("floater");
-
-//   // yDiv[0].style.background = "white";
- 
-//     randX = (Math.floor(Math.random()*2)+1).toString();
-//     randY = (Math.floor(Math.random()*5)+1).toString();
-
-//     xDiv[0].style.animation = "x "+randX.toString()+"s infinite linear alternate";
-//     yDiv[0].style.animation = "y "+randX.toString()+"s infinite linear alternate";
-//     yDiv[0].style.background = "white";
-//     yDiv[0].style.width = "100px";
-//     yDiv[0].style.height = "100px";
-//     yDiv[0].style.borderRadius = "50%";
-//     yDiv[0].style.position = "absolute";
-
-//     randX = (Math.floor(Math.random()*2)+1).toString();
-//     randY = (Math.floor(Math.random()*5)+1).toString();
-
-//     xDiv[1].style.animation = "x "+randX.toString()+"s infinite linear alternate";
-//     yDiv[1].style.animation = "y "+randX.toString()+"s infinite linear alternate";
-//     yDiv[1].style.background = "white";
-//     yDiv[1].style.width = "100px";
-//     yDiv[1].style.height = "100px";
-//     yDiv[1].style.borderRadius = "50%";
-//     yDiv[1].style.position = "absolute";
-
-//     randX = (Math.floor(Math.random()*2)+1).toString();
-//     randY = (Math.floor(Math.random()*5)+1).toString();
-
-//     xDiv[2].style.animation = "x "+randX.toString()+"s infinite linear alternate";
-//     yDiv[2].style.animation = "y "+randX.toString()+"s infinite linear alternate";
-//     yDiv[2].style.background = "white";
-//     yDiv[2].style.width = "100px";
-//     yDiv[2].style.height = "100px";
-//     yDiv[2].style.borderRadius = "50%";
-//     yDiv[2].style.position = "absolute";
-
-//     randX = (Math.floor(Math.random()*2)+1).toString();
-//     randY = (Math.floor(Math.random()*5)+1).toString();
-
-//     xDiv[3].style.animation = "x "+randX.toString()+"s infinite linear alternate";
-//     yDiv[3].style.animation = "y "+randX.toString()+"s infinite linear alternate";
-//     yDiv[3].style.background = "white";
-//     yDiv[3].style.width = "100px";
-//     yDiv[3].style.height = "100px";
-//     yDiv[3].style.borderRadius = "50%";
-//     yDiv[3].style.position = "absolute";
-// };
