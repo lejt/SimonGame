@@ -65,7 +65,6 @@ const cellColors = {
   },
   mode3: {
     1: "rgb(0, 0, 0)",
-    // bgColor: ["linear-gradient(#000000, #121858)", "linear-gradient(#123456, #123424)", "linear-gradient(#723490, #000000)"], 
   },
 };
 
@@ -368,7 +367,6 @@ function activateFloats() {
 function getRandomRange(min, max) {
   return (Math.random() * (max - min) + min).toString();
 }
-
 
 function play() {
   init();
