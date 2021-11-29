@@ -11,18 +11,18 @@ html {
 }
 header .game-title {
     background: linear-gradient(to bottom, rgba(133, 70, 175, 0.7), rgba(255, 255, 255, 0));
-    /* border: 5px solid rgba(133, 70, 175, 0.3);
-    border-radius: 10px; */
 }
 hr { 
-    border-width: 1px;
+    height: 3px;
+    background-color: rgb(83, 36, 85);
+    border: none;
 }
 .game-container {
     height: 100vh;
     position: relative;
     /* border: 1px solid yellow; */
 }
-/* ------------- IN GAME INFO ------------- */
+/* ----------------------- IN GAME INFO ----------------------- */
 .game-info {
     position: relative;
 }
@@ -48,25 +48,32 @@ hr {
     margin-left: 300px;
 }
 button {
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    background: rgb(59, 59, 59);
+    /* border: 1px solid black; */
+    border-radius: 20px;
     position: absolute;
     top: 330px;
-    left: 50%;
+    margin: 0 auto;
     transform: translate(-50%, 0);
-    z-index: 10;
+    z-index: 5;
 }
 #gameMsg {
     position: absolute;
     font-size: 100px;
     color: white;
-    z-index: 15;
+    z-index: 10;
     top: 120px;
     left: 0;
     right: 0;
     background-color:rgb(0, 0, 0);
     border-radius: 100px;
+    border: 1px solid white;
     display: none;
 }
-/* ----------------- SLIDER ----------------- */  
+/* -------------------------- SLIDER --------------------------- */  
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
     appearance: none;
@@ -76,12 +83,13 @@ button {
     opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
     -webkit-transition: .2s; /* 0.2 seconds transition on hover */
     transition: opacity .2s;
-
+    border: 1px solid rgb(94, 91, 91);
+    border-radius: 2px;
     position: absolute;
     top: 360px;
     left: 50%;
     transform: translate(-50%, 0);
-    z-index: 10;
+    z-index: 5;
 }
 .slider:hover {
     opacity: 1; /* Fully shown on mouse-over */
@@ -94,7 +102,7 @@ button {
     background: rgb(255, 0, 0); 
     cursor: pointer; /* Cursor on hover */
 }
-/* --------------- GAME CELLS --------------- */
+/* ------------------------ GAME CELLS -------------------------- */
 .cell {
     width: 300px;
     height: 300px;
@@ -102,11 +110,13 @@ button {
     opacity: 0.8;
     flex-shrink: 0;
     border-radius: 5px;
+    z-index: 2;
 }
 .top-cells {
     margin-top: 50px;      /* shifts the whole game element up and down */
     display: flex;
     justify-content: center;
+    
 }
 .bottom-cells {
     display: flex;
@@ -120,7 +130,7 @@ button {
 .cell2 {
     border-top-right-radius: 100%;
     background: radial-gradient(rgb(74, 111, 233), blue);
-    border: 10px solid rgba(12, 24, 133, 0.5);
+    border: 10px solid rgba(16, 31, 170, 0.5);
 }
 .cell3 {
     border-bottom-left-radius: 100%;
@@ -145,33 +155,33 @@ button {
     height: 300px;
     width: 300px;
     top: 160px;
-    z-index: 5;
+    z-index: 3;
     border: 6px solid rgba(36, 36, 36, 0.5);
 }
 .background-circle {
     height: 650px;
     width: 650px;
     top: -15px;
-    z-index: -5;
+    z-index: 1;
     border: 5px solid rgba(136, 133, 133, 0.5);
     /* BOX SHADOW HERE? */
 }
 
-/* ---------------- FOOTER ---------------- */
+/* -------------------------- FOOTER --------------------------- */
 footer {
     /* position: absolute; */
     text-align: right;
     color: white;
 }
 
-
-/* ------------ MODE 2 -------------- */
+/* -------------------------- MODE 2 ---------------------------- */
 .mode2 {
     position: absolute;
     left: 50%;
     /* margin-top: -620px; */
     transform: translate(-50%, 0);
     display: none;
+    z-index: 2;
 }
 .mode2-container {
     height: 620px;
@@ -181,7 +191,6 @@ footer {
     position: absolute;
     width:620px;
     height:620px;
-    /* clip:rect(0px,620px,620px,310px); */
     clip-path: polygon(50% 0, 100% 0, 100% 21%, 50% 50%);
 }
 .m2cell {
@@ -193,17 +202,13 @@ footer {
 }
 
 .m2cell1 .m2cell {
-    /* background-color: rgb(58, 45, 45); */
-
     background: linear-gradient(135deg, rgb(1, 61, 9), rgb(58, 58, 160));
-    /* background: linear-gradient(rgb(87, 88, 10),rgb(238, 238, 65)); */
     transform:rotate(60deg);
 }
 .m2cell2 {
     transform:rotate(60deg);
 }
 .m2cell2 .m2cell {
-    /* background-color: rgb(58, 45, 45); */
     background: linear-gradient(150deg, rgb(100, 3, 68), green);
     transform:rotate(60deg);
 }
@@ -211,7 +216,6 @@ footer {
     transform:rotate(120deg);
 }
 .m2cell3 .m2cell {
-    /* background-color: rgb(58, 45, 45); */
     background: linear-gradient(155deg, rgb(17, 2, 46), yellow);
     transform:rotate(60deg);
 }
@@ -219,7 +223,6 @@ footer {
     transform:rotate(180deg);
 }
 .m2cell4 .m2cell{
-    /* background-color: rgb(58, 45, 45); */
     background: linear-gradient(150deg, rgb(49, 2, 1), pink);
     transform:rotate(60deg);
 }
@@ -227,7 +230,6 @@ footer {
     transform:rotate(240deg);
 }
 .m2cell5 .m2cell {
-    /* background-color: rgb(58, 45, 45); */
     background: linear-gradient(150deg, rgb(1, 34, 3), cyan);
     transform:rotate(60deg);
 }
@@ -235,14 +237,118 @@ footer {
     transform:rotate(300deg);
 }
 .m2cell6 .m2cell {
-    /* background-color: rgb(58, 45, 45); */
     background: linear-gradient(150deg, rgb(3, 7, 70), rgb(255, 153, 0));
     transform:rotate(60deg);
 } 
 
-/* h1 copy animation */
+/* ------------------------ MODE 3 --------------------------- */
+.mode3 {
+    position: absolute;
+    left: 50%;
+    /* margin-top: -620px; */
+    transform: translate(-50%, 0);
+    display: none;
+    z-index: 2;
+}
+.mode3-container {
+    height: 620px;
+    width: 620px;
+}
+.m3cell-holder {
+    position: absolute;
+    width:620px;
+    height:620px;
+    clip-path: polygon(51% 0, 100% 0, 100% 0, 51% 50%);
+}
+.m3cell {
+    position: absolute;
+    width:620px;
+    height:620px;
+    clip:rect(0px,300px,620px,0px);
+    border-radius:310px; 
+}
+.m3cell1 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+}
+.m3cell2 {
+    transform:rotate(45deg);
+}
+.m3cell2 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+}
+.m3cell3 {
+    transform:rotate(90deg);
+}
+.m3cell3 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+}
+.m3cell4 {
+    transform:rotate(135deg);
+}
+.m3cell4 .m3cell{
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+}
+.m3cell5 {
+    transform:rotate(180deg);
+}
+.m3cell5 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+}
+.m3cell6 {
+    transform:rotate(225deg);
+}
+.m3cell6 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+} 
+.m3cell7 {
+    transform:rotate(270deg);
+}
+.m3cell7 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+} 
+.m3cell8 {
+    transform:rotate(315deg);
+}
+.m3cell8 .m3cell {
+    background-color: rgb(58, 45, 45);
+    transform:rotate(45deg);
+} 
 
+/* -------------------------- Floater --------------------------- */
+.mode3-floaters {
+    position: absolute;
+    z-index: 10;
+}
+/*  dont need below for code to work (.x .y) */
+/* .x {
+}
+.y {
+}  */
+.floater {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255,255,255,1);
+    border-radius: 50%;
+    position: absolute;
+    display: none;
+}
+@keyframes x {
+    100% { transform: translateX(calc(98vw - 100px));
+    }
+}
+@keyframes y {
+    100% { transform: translateY(calc(100vh - 100px));
+    }
+}
 
+/* -------------- h1 title animation and style ---------------*/
 svg {
     display: block;
     font-size: 9em;
@@ -251,7 +357,6 @@ svg {
     margin: 0 auto;
     margin-top: -80px;
 }
-
 .text-copy {
     fill: none;
     stroke: white;
@@ -260,37 +365,31 @@ svg {
     stroke-dashoffset: 0%;
     animation: stroke-offset 5.5s infinite linear;
 }
-
 .text-copy:nth-child(1){
 	stroke: #17164d;
 	/* stroke: #9c2a7c; */
 	animation-delay: -1s;
 }
-
 .text-copy:nth-child(2){
 	stroke: #062c74;
 	/* stroke: #840037; */
 	animation-delay: -2s;
 }
-
 .text-copy:nth-child(3){
 	stroke: #f50808;
 	/* stroke: #BD0034; */
 	animation-delay: -3s;
 }
-
 .text-copy:nth-child(4){
 	stroke: #045e1f;
 	/* stroke: #BD0034; */
 	animation-delay: -4s;
 }
-
 .text-copy:nth-child(5){
 	stroke: #c4981f;
 	/* stroke: #FDB731; */
 	animation-delay: -5s;
 }
-
 @keyframes stroke-offset{
 	100% {stroke-dashoffset: -35%;}
 }
