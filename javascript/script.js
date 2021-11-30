@@ -1,4 +1,4 @@
-// --------------------------- constants --------------------------------
+// --------------------------- CONSTANTS --------------------------------
 const sliderSettings = {
   0: {
       wordColor: "rgb(59, 11, 77)",
@@ -66,25 +66,12 @@ const cellColors = {
   mode3: {
     1: "rgb(0, 0, 0)",
   },
+  highlightCell: "radial-gradient(rgba(255,255,255,1), cadetblue)",
+  playerClick: "lightblue",
+  errorCell: "rgb(83, 36, 85)",
 };
 
-// global countDown object
-const countDown = {
-  start: function() {
-                      let timeRemaining = startState.time;
-                      startCountDown = setInterval(function() {
-                        timeRemaining--;
-                        gameLookup.time.innerText = timeRemaining;        
-                        if (timeRemaining === 0) {
-                          gameOver();
-                        }
-                      }, 1000);  
-  },
-  stop: function() {
-                      clearInterval(startCountDown) },
-};
-
-// -------------------- cached elements references -----------------------
+// ------------------------- CACHED ELEMENTS ---------------------------
 const gameLookup = {
   slider: document.getElementById("myRange"),
   mode1: {
@@ -117,14 +104,13 @@ const gameLookup = {
           m3cell6: document.querySelector(".m3cell6"),
           m3cell7: document.querySelector(".m3cell7"),
           m3cell8: document.querySelector(".m3cell8"),
-          // bgChange: [document.querySelector("html"), document.querySelector(".mode3Bg2"), document.querySelector(".mode3Bg3")]
   },
   html: document.querySelector("html"),
   time: document.getElementById("time"),
   level: document.getElementById("level"),
   button: document.querySelector("button"),
   gameStatus: document.querySelector(".game-status"),
-  gameMsg: document.getElementById("gameMsg"),
+  endGameMsg: document.getElementById("endGameMsg"),
   titleColor1: document.querySelector(".text-copy:nth-child(1)"),
   titleColor2: document.querySelector(".text-copy:nth-child(2)"),
   titleColor3: document.querySelector(".text-copy:nth-child(3)"),
@@ -135,10 +121,12 @@ const gameLookup = {
   m3floaterY: document.querySelectorAll(".y"),
 };
 
-// ------------------ App's state (Global variables) ---------------------
+// -------------------------- GLOBAL VARIABLES ----------------------------
 let startCountDown; 
 
-const gameState = {
+// -------------------- GLOBAL OBJECTS FOR GAME STATE ---------------------
+const gameState = { 
+  sliderValue: "0",
   mode: gameLookup.mode1,
   cells: gameLookup.mode1.cells,
   cellLength: gameLookup.mode1.cells.length,
@@ -146,23 +134,41 @@ const gameState = {
   intervalSpeed: sliderSettings[0].intervalSpeed,
 };
 
-// ------------------------- SLIDER MODE CHANGE ---------------------------
-// reads the state of slider upon change and varies game mode style and functions accordingly
+const countDown = {
+  start: function() {
+                      let timeRemaining = startState.time;
+                      startCountDown = setInterval(function() {
+                        timeRemaining--;
+                        gameLookup.time.innerText = timeRemaining;        
+                        if (timeRemaining === 0) {
+                          gameOver();
+                        }
+                      }, 1000);  
+  },
+  stop: function() {
+                      clearInterval(startCountDown) },
+};
 
-sliderValue = "0";
+// -------------------------- EVENT LISTENERS -----------------------------
+// event listeners embedded into functions: playerClick(), removeEvents()
+
+// ----------------------------- FUNCTIONS --------------------------------
+// reads the state of slider upon change and varies game mode style and functions accordingly
 gameLookup.slider.oninput = function () {   
-  sliderValue = this.value;
-  console.log("Slider Value: "+sliderValue);
-  soundStackPlay(sliderSound);
   init();
+  soundStackPlay(sliderSound);
+
+  sliderValue = this.value;
+  // assigning constants based on slider value
   if (sliderValue in sliderSettings) {
     gameLookup.gameStatus.style.color = sliderSettings[sliderValue].wordColor;
     gameLookup.mode1.cells.forEach(cell => cell.style.display = sliderSettings[sliderValue].m1Show);
     gameLookup.mode2.modeView.style.display = sliderSettings[sliderValue].m2Show;     
     gameLookup.mode3.modeView.style.display = sliderSettings[sliderValue].m3Show;
     gameLookup.html.style.background = sliderSettings[sliderValue].background; 
+    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
+    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
     
-    // changing title elements' colors:
     gameLookup.titleColor1.style.stroke = sliderSettings[sliderValue].stroke1;
     gameLookup.titleColor2.style.stroke = sliderSettings[sliderValue].stroke2;
     gameLookup.titleColor3.style.stroke = sliderSettings[sliderValue].stroke3;
@@ -170,35 +176,17 @@ gameLookup.slider.oninput = function () {
     gameLookup.titleColor5.style.stroke = sliderSettings[sliderValue].stroke5;
   }
 
-  if (sliderValue == "0") {
-    gameState.mode = gameLookup.mode1;
-    gameState.cells = gameState.mode.cells;
-    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
-    gameState.cellLength = (gameLookup.mode1.cells).length;
-  } else if (sliderValue === "50") {
-    gameState.mode = gameLookup.mode2;
-    gameState.cells = gameState.mode.m2cells;
-    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed; 
-    gameState.cellLength = (gameLookup.mode2.m2cells).length;
-  } else {
-    gameState.mode = gameLookup.mode3;
-    gameState.cells = gameState.mode.m3cells;
-    gameState.flashSpeed = sliderSettings[sliderValue].flashSpeed;
-    gameState.intervalSpeed = sliderSettings[sliderValue].intervalSpeed;
-    gameState.cellLength = (gameLookup.mode3.m3cells).length;
-  };
+  // updating gameState with DOM elements based on slider value
+  gameStateUpdate(sliderValue);
 };
 
-// ---------------- EVENT LISTENERS FOR ALL GAME MODES  -------------------
-// event listeners embedded into functions: playerClick(), removeEvents()
-
-// ----------------------------- FUNCTIONS --------------------------------
 function init() {
   startState = {
     level: 0,
     time: 60,
+    startBtnMsg: "Start Game",
+    endGameMsgHide: "none",
+    floaterHide: "none",
   };
   sequenceStorage = {
     correctSeq: [],
@@ -206,16 +194,13 @@ function init() {
     playerSelect: null,
   };
   countDown.stop();
-  gameLookup.gameMsg.style.display = "none";
-  gameLookup.button.innerText = "Start Game";
-  gameLookup.time.innerText = startState.time;
-  gameLookup.level.innerText = startState.level;
-  gameLookup.m3floaters.forEach(floater=> {floater.style.display = "none"});
+  bgmArray.forEach(mode => mode.pause());
   refreshColors();
   removeEvents();
-  bgmArray.forEach(mode => mode.pause());
+  newGameRender();
 };
 
+// clears all error-colored cells and resets back to original cell colors
 function refreshColors() {
   gameLookup.mode1.cells.forEach(cell=> {
     cell.style.background = cellColors.mode1[cell.id];
@@ -228,7 +213,7 @@ function refreshColors() {
   })
 };
 
-//removes click event listeners 
+// removes click event listeners 
 function removeEvents() {
   gameLookup.mode1.cells.forEach(removeListener);
   gameLookup.mode2.m2cells.forEach(removeListener);
@@ -238,6 +223,33 @@ function removeEvents() {
   };
 };
 
+// prepares the DOM to display start state values
+function newGameRender() {
+  gameLookup.endGameMsg.style.display = startState.endGameMsgHide;
+  gameLookup.button.innerText = startState.startBtnMsg;
+  gameLookup.time.innerText = startState.time;
+  gameLookup.level.innerText = startState.level;
+  gameLookup.m3floaters.forEach(floater=> {floater.style.display = startState.floaterHide});
+};
+
+// updates gameState global key:values based on sliderValue change
+function gameStateUpdate (sliderValue) {
+  gameState.sliderValue = sliderValue;
+  if (sliderValue == "0") {
+    gameState.mode = gameLookup.mode1;
+    gameState.cells = gameState.mode.cells;
+    gameState.cellLength = (gameLookup.mode1.cells).length;
+  } else if (sliderValue === "50") {
+    gameState.mode = gameLookup.mode2;
+    gameState.cells = gameState.mode.m2cells;
+    gameState.cellLength = (gameLookup.mode2.m2cells).length;
+  } else {
+    gameState.mode = gameLookup.mode3;
+    gameState.cells = gameState.mode.m3cells;
+    gameState.cellLength = (gameLookup.mode3.m3cells).length;
+  }
+};
+
 function randomCell() {
   let randomIndex = Math.floor(Math.random()*gameState.cellLength);
   return randomIndex;
@@ -245,8 +257,6 @@ function randomCell() {
 
 function sequencer() {
   let idx = randomCell();
-  cells = [];
-  mode = "";
 
   // add new random cell to end of previous sequence and creates a copy of array for checking 
   sequenceStorage.correctSeq.push(idx);
@@ -270,7 +280,7 @@ function sequencer() {
 function highlightUnhighlight(mode, cell, idx, flashSpeed) {
     //highlight
     setTimeout(function() {
-      cell.style.background = "radial-gradient(rgba(255,255,255,1), cadetblue)";
+      cell.style.background = cellColors.highlightCell;
         
       //unhighlight
       setTimeout(function() {
@@ -284,10 +294,9 @@ function highlightUnhighlight(mode, cell, idx, flashSpeed) {
       }, flashSpeed);
 
     }, flashSpeed);
-
   };
   
-// click event listeners
+// add click event listeners
 function playerClick() {
   console.log("Sequence answer: "+sequenceStorage.tempCheckSeq);
   gameLookup.mode1.cells.forEach(addListener);
@@ -304,7 +313,7 @@ function playerSelect(evt) {
   sequenceStorage.playerSelect = parseInt(evt.target.id);
   soundStackPlay(buttonClick);
 
-  gameState.cells[sequenceStorage.playerSelect-1].style.background = "lightblue";
+  gameState.cells[sequenceStorage.playerSelect-1].style.background = cellColors.playerClick;
   checkCorrect(gameState.mode, gameState.cells);
 };
 
@@ -330,7 +339,7 @@ function checkCorrect(mode, cells) {
     }
 
   } else {
-    unhighlightPlayerSelect("rgb(83, 36, 85)");
+    unhighlightPlayerSelect(cellColors.errorCell);
     gameOver();
   }
 };
@@ -338,11 +347,11 @@ function checkCorrect(mode, cells) {
 function unhighlightPlayerSelect(revertColor) {
   setTimeout(function() {
     gameState.cells[sequenceStorage.playerSelect-1].style.background = revertColor;
-  },sliderSettings[sliderValue].playerUnhighlight)
+  },sliderSettings[gameState.sliderValue].playerUnhighlight)
 };
 
 function gameOver() {
-  gameLookup.gameMsg.style.display = "block";
+  gameLookup.endGameMsg.style.display = "block";
   gameLookup.button.innerText = "Restart";
   countDown.stop();
   gameOverSound.play();
@@ -372,11 +381,11 @@ function play() {
   init();
   countDown.start();
   sequencer();
-  if (sliderValue === "0") {
+  if (gameState.sliderValue === "0") {
     mode1BGM.play();
-  } else if (sliderValue === "50") {
+  } else if (gameState.sliderValue === "50") {
     mode2BGM.play();
-  } else if (sliderValue === "100") {
+  } else if (gameState.sliderValue === "100") {
     activateFloats();
     mode3BGM.play();
   }
@@ -393,6 +402,8 @@ const sliderSound = new Audio("Resources/Audio/slider.mp3");
 // Audio Control
 const bgmArray = [mode1BGM, mode2BGM, mode3BGM];
 bgmArray.forEach(mode => mode.loop = true);
+buttonClick.volume = 0.5;
+sliderSound.volume = 0.5;
 mode2BGM.volume = 0.25;
 mode3BGM.volume = 0.5;
 
@@ -402,7 +413,7 @@ function soundStackPlay (audio) {
   audio.play();
 }
 
-// ------------------ ACTION -------------------
+// ---------------------------- ACTION ---------------------------------
 document.querySelector("button").addEventListener("click", play);
 
 
