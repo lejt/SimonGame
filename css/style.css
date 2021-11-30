@@ -108,6 +108,9 @@ button {
     border-radius: 5px;
     z-index: 2;
 }
+.cell:hover, .m2cell:hover, .m3cell:hover, button {
+    cursor: pointer;
+}
 .top-cells {
     margin-top: 50px;      /* shifts the whole game element up and down */
     display: flex;
