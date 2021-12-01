@@ -415,6 +415,7 @@ function soundStackPlay (audio) {
 }
 
 // ---------------------------- ACTION ---------------------------------
+init();
 document.querySelector("button").addEventListener("click", play);
 
 
