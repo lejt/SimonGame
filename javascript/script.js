@@ -299,7 +299,7 @@ function highlightUnhighlight(mode, cell, idx, flashSpeed) {
   
 // add click event listeners
 function playerClick() {
-  console.log("Sequence answer: "+sequenceStorage.tempCheckSeq);
+  // console.log("Sequence answer (cell count start from 0): "+sequenceStorage.tempCheckSeq);
   gameLookup.mode1.cells.forEach(addListener);
   gameLookup.mode2.m2cells.forEach(addListener);
   gameLookup.mode3.m3cells.forEach(addListener);
