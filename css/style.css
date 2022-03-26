@@ -69,7 +69,16 @@ button {
     border: 1px solid white;
     display: none;
 }
-/* -------------------------- SLIDER --------------------------- */  
+/* -------------------------- SLIDER --------------------------- */ 
+.slidecontainer h1 {
+    color: rgb(165, 161, 161);
+    font-size: 15px;
+    position: absolute;
+    left: 50%;
+    top: 370px;
+    transform: translate(-50%, 50%);
+    z-index: 5;
+} 
 .slider {
     appearance: none;
     height: 25px; 
